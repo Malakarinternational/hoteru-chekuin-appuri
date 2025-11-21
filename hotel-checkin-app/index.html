@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Service NSW" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#121212" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <title>Service NSW</title>
+  <style>
+    :root { color-scheme: dark; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #121212;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    body {
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+    .app-content {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      scroll-behavior: smooth;
+    }
+    .app-content::-webkit-scrollbar { display: none; }
+    .section { width: 100%; flex-shrink: 0; }
+    .background-image { width: 100%; height: auto; object-fit: cover; display: block; }
+    .sticky-navbar-top {
+      position: fixed;
+      top: env(safe-area-inset-top);
+      left: 0;
+      width: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .transition-container {
+      position: fixed;
+      top: 0; left: 100%;
+      width: 100%; height: 100%;
+      overflow-y: auto;
+      z-index: 100;
+      background-color: #121212;
+      transition: left 0.5s ease;
+    }
+    .transition-container::-webkit-scrollbar { display: none; }
+    .transition-image { width: 100%; height: auto; display: block; }
+    .hidden-trigger {
+      position: fixed;
+      top: calc(env(safe-area-inset-top) + 10px);
+      left: 10px;
+      width: 40px;
+      height: 40px;
+      background-color: transparent;
+      z-index: 101;
+      cursor: pointer;
+    }
+    .number-nav {
+      position: fixed;
+      top: calc(env(safe-area-inset-top) + 60px);
+      right: 10px;
+      z-index: 102;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .number-nav button {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+      background: #1c1c1c;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+    }
+    .number-nav button:active { transform: scale(0.98); }
+  </style>
+</head>
+<body>
+  <div class="hidden-trigger" onclick="hideTransitionImage()" aria-label="Close overlay"></div>
+  <img src="https://i.ibb.co/2q26skg/Frame-3.png" alt="Top bar" class="sticky-navbar-top" />
+  <div class="number-nav" aria-label="Quick navigation">
+    <button onclick="showTransitionImage()">1</button>
+    <button onclick="scrollToSection(2)">2</button>
+  </div>
+  <div class="app-content" id="content">
+    <div class="section" id="s1" onclick="showTransitionImage()">
+      <img src="https://i.ibb.co/jZbkwmn/Frame-10.png" alt="First Section" class="background-image" loading="lazy" />
+    </div>
+    <div class="section" id="s2">
+      <img src="https://i.ibb.co/1QbssJv/Iphone-13-pro-max-4-3-1.png" alt="Second Section" class="background-image" loading="lazy" />
+    </div>
+  </div>
+  <div class="transition-container" id="transitionContainer" role="dialog" aria-modal="true">
+    <a href="https://ibb.co/44mtPZq" target="_blank" rel="noopener">
+      <img src="https://i.ibb.co/6DnwgRM/141-FA760-04-F7-4368-B106-AECC0-FDF55-ED.jpg" alt="Overlay" class="transition-image" />
+    </a>
+  </div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js').catch(console.error);
+      });
+    }
+    function showTransitionImage() {
+      document.getElementById('transitionContainer').style.left = '0';
+    }
+    function hideTransitionImage() {
+      document.getElementById('transitionContainer').style.left = '100%';
+    }
+    function scrollToSection(n) {
+      const el = document.getElementById('s' + n);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  </script>
+</body>
+</html>
